@@ -11,13 +11,19 @@ static float fftThreshold = 1;
 static float fftPow = 1.8;
 static float fftAmp = 5;
 static float volumeGain = -10;
-static String songName = "../Music/everchanging.mp3";
+static String songName = "../Music/profitprophet.wav";
 
 IColor defaultFill = new IColor(222,125,222,255);
 IColor defaultStroke = new IColor(0,0,0,0);
 
 void render() {
 	//if (timer.beat) println(song.position + " " + currBeat)
+
+	fill(255);
+	float w = width/av.length;
+	for (int i = 0 ; i < av.length ; i ++) {
+		rect((float)i/av.length*width,0, w, av[i]*10);
+	}
 }
 
 void setSketch() {
