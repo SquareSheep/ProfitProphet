@@ -88,8 +88,8 @@ void update() {
 
   updateEvents();
 
-  for (Entity mob : mobs) {
-    mob.update();
+  for (int i = 0 ; i < mobs.size() ; i ++) {
+    mobs.get(i).update();
   }
   for (int i = 0 ; i < mobs.size() ; i ++) {
     if (mobs.get(i).finished) mobs.remove(i);
@@ -214,6 +214,14 @@ void drawPitches() {
     rect(0,0,w,av[i]*10);
   }
   pop();
+}
+
+void drawPitches2D() {
+  fill(255);
+  float w = width/av.length;
+  for (int i = 0 ; i < av.length ; i ++) {
+    rect((float)i/av.length*width,0, w, av[i]*10);
+  }
 }
 
 void drawBorders() {

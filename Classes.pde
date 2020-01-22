@@ -314,11 +314,19 @@ class SpringValue {
   float mass;
   int index = -1;
 
-  SpringValue(float x, float vMult, float mass) {
+  SpringValue(float x, float X, float vMult, float mass) {
     this.x = x;
-    this.X = x;
+    this.X = X;
     this.vMult = vMult;
     this.mass = mass;
+  }
+
+  SpringValue(float x, float vMult, float mass) {
+    this(x, x, vMult, mass);
+  }
+
+  SpringValue(float x, float X) {
+    this(x, X, defaultVMult, defaultMass);
   }
 
   SpringValue(float x) {
