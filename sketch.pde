@@ -16,6 +16,8 @@ static String songName = "../Music/profitprophet.wav";
 IColor defaultFill = new IColor(222,125,222,255);
 IColor defaultStroke = new IColor(0,0,0,0);
 
+ScreenTunnel tel;
+
 void render() {
 	//if (timer.beat) println(song.position + " " + currBeat)
 	if (frameCount % 5 == 0) {
@@ -23,7 +25,7 @@ void render() {
 		for (float i = 0 ; i < row ; i ++) {
 			for (float k = 0 ; k < row ; k ++) {
 				if (random(1) > 0.98) {
-					mobs.add(new SplitSquare(i/row*de*2-de,k/row*de*2-de,de*2/row));
+					tel.add(new SplitSquare(i/row*tel.w*4-tel.w*2,k/row*tel.h-tel.h/2,tel.h/row));
 				}
 			}
 		}
@@ -31,5 +33,10 @@ void render() {
 }
 
 void setSketch() {
-	stroke(0);
+	stroke(255);
+	tel = new ScreenTunnel(new PVector(0,0,0), new PVector(PI/2,0,0), de*1.2,de*2.2);
+	mobs.add(tel);
+	for (int i = 0 ; i < 100 ; i ++) {
+		tel.add(new TunnelRect(random(-tel.w*2,tel.w*2),random(-tel.h,tel.h),random(25,100),random(50,125)));
+	}
 }

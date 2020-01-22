@@ -1,9 +1,36 @@
+class TunnelRect extends EntityX {
+	Point w;
+	IColor fillStyle;
+
+	TunnelRect(float x, float y, float w, float h) {
+		this.p = new Point(x,y,0);
+		this.w = new Point(w,h,0);
+		fillStyle = new IColor(random(125,255),random(125,255),random(125,255),255);
+	}
+
+	void update() {
+		p.P.x += 5;
+		p.update();
+		w.update();
+		fillStyle.update();
+	}
+
+	void render() {
+		fillStyle.fillStyle();
+		if (w.p.z <= 1) {
+			translate(0,0,w.p.z/2);
+			box(w.p.x, w.p.y, w.p.z);
+		} else {
+			rect(0,0,w.p.x,w.p.y);
+		}
+	}
+}
+
 int SplitSquareMaxLevel = 2;
-class SplitSquare extends Entity {
+class SplitSquare extends EntityX {
 	float splitChance = random(0.05,0.1);
 	float childChance = 0.5;
 	int tick = 1;
-	float x,y;
 	SpringValue w;
 	float W;
 	int level;
@@ -11,11 +38,7 @@ class SplitSquare extends Entity {
 	IColor fillStyle;
 
 	SplitSquare(float x, float y, float w, int level) {
-		x = min(x,de);
-		x = max(x,-de);
-		y = min(y,de);
-		y = max(y,-de);
-		this.x = x; this.y = y;
+		this.p = new Point(x,y,0);
 		this.W = w;
 		this.w = new SpringValue(0,w);
 		this.w.index = (int)(noise(x/100,y/100)*binCount)%binCount;
@@ -33,6 +56,7 @@ class SplitSquare extends Entity {
 	}
 
 	void update() {
+		p.update();
 		w.update();
 		fillStyle.update();
 		if (alive && frameCount % tick == 0) {
@@ -45,11 +69,9 @@ class SplitSquare extends Entity {
 	}
 
 	void render() {
-		push();
-		translate(x,y,w.x/2);
+		//translate(0,0,-w.x/2);
 		fillStyle.fillStyle();
 		box(w.x);
-		pop();
 	}
 
 	void split() {
@@ -57,10 +79,10 @@ class SplitSquare extends Entity {
 		if (level < SplitSquareMaxLevel) {
 			float nw = W/1.6;
 			float dw = W/3;
-			if (random(1) < childChance) mobs.add(new SplitSquare(x-dw,y-dw,nw,level+1));
-			if (random(1) < childChance) mobs.add(new SplitSquare(x+dw,y-dw,nw,level+1));
-			if (random(1) < childChance) mobs.add(new SplitSquare(x+dw,y+dw,nw,level+1));
-			if (random(1) < childChance) mobs.add(new SplitSquare(x-dw,y+dw,nw,level+1));
+			if (random(1) < childChance) ((ScreenTunnel)mobs.get(0)).add(new SplitSquare(p.p.x-dw,p.p.y-dw,nw,level+1));
+			if (random(1) < childChance) ((ScreenTunnel)mobs.get(0)).add(new SplitSquare(p.p.x+dw,p.p.y-dw,nw,level+1));
+			if (random(1) < childChance) ((ScreenTunnel)mobs.get(0)).add(new SplitSquare(p.p.x+dw,p.p.y+dw,nw,level+1));
+			if (random(1) < childChance) ((ScreenTunnel)mobs.get(0)).add(new SplitSquare(p.p.x-dw,p.p.y+dw,nw,level+1));
 		}
 	}
 }
