@@ -1,5 +1,8 @@
 void addEvents() {
-
+	events.add(new SetTunnelPv(0, tel, 0,5));
+	for (int i = 10 ; i < 20 ; i +=2) {
+		events.add(new SpawnTunnelObject(i,tel,new SpreadRect(0,0, 100,100, 25,0, 300)));
+	}
 }
 
 void keyboardInput() {

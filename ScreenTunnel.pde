@@ -1,29 +1,46 @@
 class ScreenTunnel extends Entity {
 	Point p;
 	Point ang;
-	float w; // w is only 1/4th of the total width wrapped around
+	float w; // Boundaries: -w*2 to w*2, -h/2 to h/2
 	float h;
-	ArrayList<EntityX> ar = new ArrayList<EntityX>();
+	float W;
+	float H;
+	ArrayList<TunnelEntity> ar = new ArrayList<TunnelEntity>();
+	Point pv = new Point(); // pv for ar objects
 
 	ScreenTunnel(PVector p, PVector ang, float w, float h) {
 		this.p = new Point(p);
 		this.ang = new Point(ang);
 		this.w = w; this.h = h;
+		this.W = w*2; this.H = h/2;
 	}
 
 	void update() {
 		p.update();
 		ang.update();
+		pv.update();
 		for (int i = 0 ; i < ar.size() ; i ++) {
-			EntityX mob = ar.get(i);
-			if (mob.p.p.x < -w*2) {
-				mob.p.p.x = w*2;
-				mob.p.P.x = w*2;
-			} else if (mob.p.p.x > w*2) {
-				mob.p.p.x = -w*2;
-				mob.p.P.x = -w*2;
+			TunnelEntity mob = ar.get(i);
+			mob.p.P.add(pv.p);
+			if (mob.p.p.x < -W) {
+				mob.p.p.x = W;
+				mob.p.P.x = W;
+			} else if (mob.p.p.x > W) {
+				mob.p.p.x = -W;
+				mob.p.P.x = -W;
+			}
+			if (mob.p.p.y < -H) {
+				mob.p.p.y = H;
+				mob.p.P.y = H;
+			} else if (mob.p.p.y > H) {
+				mob.p.p.y = -H;
+				mob.p.P.y = -H;
 			}
 			mob.update();
+			if (mob.lifeSpan != -1) {
+				mob.lifeSpan --;
+				if (mob.lifeSpan == 0) mob.finished = true;
+			}
 		}
 		for (int i = 0 ;  i < ar.size() ; i ++) {
 			if (ar.get(i).finished) ar.remove(i);
@@ -33,7 +50,7 @@ class ScreenTunnel extends Entity {
 	void renderRect(float minW, float maxW) {
 		translate(0,0,w/2);
 		stroke(255);
-		for (EntityX mob : ar) {
+		for (TunnelEntity mob : ar) {
 			if (mob.draw && mob.p.p.x >= minW && mob.p.p.x < maxW) {
 				push();
 				translate(mob.p.p.x-minW-w/2,mob.p.p.y,mob.p.p.z);
@@ -55,21 +72,39 @@ class ScreenTunnel extends Entity {
 		rotateX(ang.p.x);
 		rotateY(ang.p.y);
 		rotateZ(ang.p.z);
-		renderRect(-w*2,-w);
+		renderRect(-W,-W/2);
 		rotateY(PI/2);
-		renderRect(-w,0);
+		renderRect(-W/2,0);
 		rotateY(PI/2);
-		renderRect(0,w);
+		renderRect(0,W/2);
 		rotateY(PI/2);
-		renderRect(w,w*2);
+		renderRect(W/2,W);
 		pop();
 	}
 
-	void add(EntityX mob) {
+	void add(TunnelEntity mob) {
 		ar.add(mob);
+	}
+
+	TunnelEntity getLast() {
+		return ar.get(ar.size()-1);
 	}
 }
 
-abstract class EntityX extends Entity {
+abstract class TunnelEntity extends Entity {
   Point p;
+  Point w;
+  SpringValue sca = new SpringValue(1);
+  int lifeSpan = -1;
+  ScreenTunnel parent = tel;
+  IColor fillStyle;
+
+  TunnelEntity(ScreenTunnel parent) {
+  	this.parent = parent;
+  	this.w = new Point();
+  }
+
+  TunnelEntity() {
+  	this.w = new Point();
+  }
 }
