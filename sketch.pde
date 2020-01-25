@@ -19,11 +19,13 @@ IColor defaultStroke = new IColor(0,0,0,0);
 ScreenTunnel tel;
 
 void render() {
-	if (timer.beat) println(song.position() + " " + currBeat+1.0);
+	if (timer.beat) println(song.position() + " " + (int)(currBeat+1.0));
 }
 
 void setSketch() {
 	stroke(255);
+	strokeWeight(3);
+	noFill();
 	tel = new ScreenTunnel(new PVector(0,0,-de*0.5), new PVector(PI/2,0,0), de*1.2,de*3);
 	mobs.add(tel);
 }

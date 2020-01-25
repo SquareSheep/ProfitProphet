@@ -54,6 +54,12 @@ class ScreenTunnel extends Entity {
 			if (mob.draw && mob.p.p.x >= minW && mob.p.p.x < maxW) {
 				push();
 				translate(mob.p.p.x-minW-w/2,mob.p.p.y,mob.p.p.z);
+				if (mob.gradient) {
+					// Use tunnel's gradient
+					stroke(255);
+				} else {
+					mob.fillStyle.strokeStyle();
+				}
 				mob.render();
 				pop();
 			}
@@ -98,6 +104,7 @@ abstract class TunnelEntity extends Entity {
   int lifeSpan = -1;
   ScreenTunnel parent = tel;
   IColor fillStyle;
+  boolean gradient = true;
 
   TunnelEntity(ScreenTunnel parent) {
   	this.parent = parent;
@@ -106,5 +113,14 @@ abstract class TunnelEntity extends Entity {
 
   TunnelEntity() {
   	this.w = new Point();
+  }
+
+  void render() {
+	if (w.p.z > 1) {
+		translate(0,0,-w.p.z/2);
+		box(w.p.x, w.p.y, w.p.z);
+	} else {
+		rect(0,0,w.p.x,w.p.y);
+	}
   }
 }

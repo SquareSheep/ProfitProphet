@@ -1,69 +1,107 @@
-class TunnelRect extends TunnelEntity {
-	float vx; float vy;
+/*
 
-	TunnelRect(float x, float y, float w, float h, float vx, float vy) {
-		this.p = new Point(x,y,0);
-		this.w = new Point(w,h,0);
-		this.w.index = (int)random(binCount);
-		this.w.pm.z = sqrt(w*h)*0.03;
-		this.vx = vx;
-		this.vy = vy;
-		fillStyle = new IColor(random(25,100),random(25,100),random(25,100),255, random(10),random(10),random(10),0, (int)random(binCount));
+*/
+class RectVAvSource extends RectVSource {
+	int index; float threshold;
+
+	RectVAvSource(float x, float y, float w, float h, float vx, float vy, 
+		int lifeSpan, int spawnLifeSpan, float[] spawnDir, boolean[] spawnFlip, int index, float threshold) {
+		super(x,y,w,h,vx,vy,lifeSpan,spawnLifeSpan,spawnDir,spawnFlip);
+		this.index = index; this.threshold = threshold;
 	}
 
-	TunnelRect(float x, float y, float w, float h) {
-		this(x,y, w,h, 0,0);
+	RectVAvSource(float x, float y, float w, float h, float vx, float vy, int lifeSpan, int spawnLifeSpan, int index, float threshold) {
+		super(x,y,w,h,vx,vy,lifeSpan,spawnLifeSpan);
+		this.index = index; this.threshold = threshold;
 	}
 
-	void update() {
-		p.P.x += vx;
-		p.P.y += vy;
-		p.update();
-		w.update();
-		fillStyle.update();
+	RectVAvSource(float x, float y, float w, float h, float vx, float vy, int index, float threshold) {
+		super(x,y,w,h,vx,vy);
+		this.index = index; this.threshold = threshold;
 	}
 
-	void render() {
-		fillStyle.fillStyle();
-		if (w.p.z > 1) {
-			translate(0,0,-w.p.z/2);
-			box(w.p.x, w.p.y, w.p.z);
-		} else {
-			rect(0,0,w.p.x,w.p.y);
-		}
+	void spawnCheck() {
+		if (frameCount % tick == 0 && av[index] > threshold) spawn();
 	}
 }
 
-class SpreadRect extends TunnelRect {
+class RectVSource extends RectV {
 	int spawnLifeSpan;
 	int tick;
+	float[] spawnDir;
+	boolean[] spawnFlip;
 
-	SpreadRect(float x, float y, float w, float h, float vx, float vy, int lifeSpan, int spawnLifeSpan) {
+	RectVSource(float x, float y, float w, float h, float vx, float vy, 
+		int lifeSpan, int spawnLifeSpan, float[] spawnDir, boolean[] spawnFlip) {
 		super(x,y,w,h,vx,vy);
 		this.lifeSpan = lifeSpan;
 		this.spawnLifeSpan = spawnLifeSpan;
 		tick = (int)(w*h/max(vx,1)/max(vy,1)/60)+1;
-		println(tick);
+		this.spawnDir = new float[spawnDir.length];
+		this.spawnFlip = new boolean[spawnFlip.length];
+		for (int i = 0 ; i < spawnFlip.length ; i ++) {
+			this.spawnFlip[i] = spawnFlip[i];
+			this.spawnDir[i*2] = spawnDir[i*2];
+			this.spawnDir[i*2+1] = spawnDir[i*2+1];
+		}
 	}
 
-	SpreadRect(float x, float y, float w, float h, float vx, float vy, int lifeSpan) {
-		this(x,y,w,h,vx,vy,lifeSpan,lifeSpan);
+	RectVSource(float x, float y, float w, float h, float vx, float vy, int lifeSpan, int spawnLifeSpan) {
+		this(x,y,w,h,vx,vy,lifeSpan,lifeSpan, new float[]{-1,-1}, new boolean[]{true});
 	}
 
-	SpreadRect(float x, float y, float w, float h, float vx, float vy) {
+	RectVSource(float x, float y, float w, float h, float vx, float vy) {
 		this(x,y,w,h,vx,vy,-1,(int)fpb*12);
 	}
 
 	void update() {
 		super.update();
+		spawnCheck();
+	}
+
+	void spawnCheck() {
 		if (frameCount % tick == 0) spawn();
 	}
 
 	void spawn() {
-		parent.add(new TunnelRect(p.p.x,p.p.y,w.p.x,w.p.y,vy,vx));
-		parent.getLast().lifeSpan = spawnLifeSpan;
-		parent.add(new TunnelRect(p.p.x,p.p.y,w.p.x,w.p.y,-vy,-vx));
-		parent.getLast().lifeSpan = spawnLifeSpan;
+		for (int i = 0 ; i < spawnFlip.length ; i ++) {
+			if (spawnFlip[i]) {
+				parent.add(new RectV(p.p.x,p.p.y,w.p.x,w.p.y, pv.p.y*spawnDir[i*2],pv.p.x*spawnDir[i*2+1], spawnLifeSpan));
+			} else {
+				parent.add(new RectV(p.p.x,p.p.y,w.p.x,w.p.y, pv.p.x*spawnDir[i*2],pv.p.y*spawnDir[i*2+1], spawnLifeSpan));
+			}
+		}
+	}
+}
+
+class RectV extends TunnelEntity {
+	Point pv;
+
+	RectV(float x, float y, float w, float h, float vx, float vy, int lifeSpan) {
+		this.p = new Point(x,y,0);
+		this.w = new Point(w,h,0);
+		this.w.p.set(0,0,0);
+		this.w.index = (int)random(binCount);
+		this.w.pm.z = sqrt(w*h)*0.03;
+		this.pv = new Point(vx,vy,0);
+		fillStyle = new IColor(random(25,100),random(25,100),random(25,100),255, random(10),random(10),random(10),0, (int)random(binCount));
+		this.lifeSpan = lifeSpan;
+	}
+
+	RectV(float x, float y, float w, float h, float vx, float vy) {
+		this(x,y,w,h,vx,vy,-1);
+	}
+
+	RectV(float x, float y, float w, float h) {
+		this(x,y, w,h, 0,0);
+	}
+
+	void update() {
+		p.P.add(pv.p);
+		p.update();
+		pv.update();
+		w.update();
+		fillStyle.update();
 	}
 }
 
@@ -72,7 +110,6 @@ class SplitSquare extends TunnelEntity {
 	float splitChance = random(0.05,0.1);
 	float childChance = 0.5;
 	int tick = 1;
-	SpringValue w;
 	float W;
 	int level;
 	boolean alive = true;
@@ -80,9 +117,9 @@ class SplitSquare extends TunnelEntity {
 	SplitSquare(float x, float y, float w, int level) {
 		this.p = new Point(x,y,0);
 		this.W = w;
-		this.w = new SpringValue(0,w);
+		this.w = new Point(w,w,0);
 		this.w.index = (int)(noise(x/100,y/100)*binCount)%binCount;
-		this.w.xm = w*0.01;
+		this.w.pm.z = w*0.01;
 		this.level = level;
 		float famp = 2;
 		fillStyle = new IColor(
@@ -103,15 +140,9 @@ class SplitSquare extends TunnelEntity {
 			if (random(1) < splitChance) split();
 		}
 		if (!alive) {
-			if (w.X != 0) w.X = 0;
-			if (w.x <= 10) finished = true;
+			if (w.P.x != 0) w.P.set(0,0,0);
+			if (w.p.x <= 10) finished = true;
 		}
-	}
-
-	void render() {
-		//translate(0,0,-w.x/2);
-		fillStyle.fillStyle();
-		box(w.x);
 	}
 
 	void split() {

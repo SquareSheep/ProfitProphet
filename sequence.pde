@@ -1,8 +1,10 @@
 void addEvents() {
-	events.add(new SetTunnelPv(0, tel, 0,5));
-	for (int i = 10 ; i < 20 ; i +=2) {
-		events.add(new SpawnTunnelObject(i,tel,new SpreadRect(0,0, 100,100, 25,0, 300)));
+	events.add(new SetTunnelPv(0, tel, 0,0));
+	for (int i = 0 ; i < 10 ; i ++) {
+		events.add(new SpawnTunnelObject(2+i*2,tel, new RectVAvSource(0,0, 100,100, 25,0, 
+	 		600,120, new float[]{-2,-2, 2,2}, new boolean[]{true,true},0,3)));
 	}
+	
 }
 
 void keyboardInput() {
@@ -11,7 +13,7 @@ void keyboardInput() {
 		setTime(0,0);
 		break;
 		case '2':
-		setTime(0,0);
+		setTime(24055,49);
 		break;
 		case '3':
 		setTime(0,0);
