@@ -24,6 +24,20 @@ Background
 
 Background bass notes
 */
+class SetTunnelAv extends Event {
+	ScreenTunnel tunnel;
+	float x,y,z;
+
+	SetTunnelAv(float time, ScreenTunnel tunnel, float x, float y, float z) {
+		super(time, time+1);
+		this.tunnel = tunnel;
+		this.x = x; this.y = y; this.z = z;
+	}
+
+	void spawn() {
+		tunnel.av.P.set(x,y,z);
+	}
+}
 
 class SetTunnelPv extends Event {
 	ScreenTunnel tunnel;

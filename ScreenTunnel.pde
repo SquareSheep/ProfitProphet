@@ -1,6 +1,7 @@
 class ScreenTunnel extends Entity {
 	Point p;
 	Point ang;
+	Point av = new Point();
 	float w; // Boundaries: -w*2 to w*2, -h/2 to h/2
 	float h;
 	float W;
@@ -16,8 +17,10 @@ class ScreenTunnel extends Entity {
 	}
 
 	void update() {
+		ang.P.add(av.p);
 		p.update();
 		ang.update();
+		av.update();
 		pv.update();
 		for (int i = 0 ; i < ar.size() ; i ++) {
 			TunnelEntity mob = ar.get(i);
@@ -104,7 +107,7 @@ abstract class TunnelEntity extends Entity {
   int lifeSpan = -1;
   ScreenTunnel parent = tel;
   IColor fillStyle;
-  boolean gradient = true;
+  boolean gradient = false;
 
   TunnelEntity(ScreenTunnel parent) {
   	this.parent = parent;
@@ -117,7 +120,7 @@ abstract class TunnelEntity extends Entity {
 
   void render() {
 	if (w.p.z > 1) {
-		translate(0,0,-w.p.z/2);
+		//translate(0,0,-w.p.z/2);
 		box(w.p.x, w.p.y, w.p.z);
 	} else {
 		rect(0,0,w.p.x,w.p.y);

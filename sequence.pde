@@ -1,8 +1,8 @@
 void addEvents() {
 	events.add(new SetTunnelPv(0, tel, 0,0));
 	for (int i = 0 ; i < 10 ; i ++) {
-		events.add(new SpawnTunnelObject(2+i*2,tel, new RectVAvSource(0,0, 100,100, 25,0, 
-	 		600,120, new float[]{-2,-2, 2,2}, new boolean[]{true,true},0,3)));
+		events.add(new SpawnTunnelObject(2+i*4,tel, new RectVAvSource(0,0, 100,100, 5,0, 
+	 		1600,300, new float[]{-2,-2, 2,2}, new boolean[]{true,true},0,3)));
 	}
 	
 }
