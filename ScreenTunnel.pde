@@ -9,6 +9,10 @@ class ScreenTunnel extends Entity {
 	ArrayList<TunnelEntity> ar = new ArrayList<TunnelEntity>();
 	Point pv = new Point(); // pv for ar objects
 
+	int gMode = 0;
+	float gr,gb,gg,ga,grm,gbm,ggm,gam;
+	float t,temp,x1,y1,x2,y2;
+
 	ScreenTunnel(PVector p, PVector ang, float w, float h) {
 		this.p = new Point(p);
 		this.ang = new Point(ang);
@@ -39,10 +43,16 @@ class ScreenTunnel extends Entity {
 				mob.p.p.y = -H;
 				mob.p.P.y = -H;
 			}
+			mob.sca.update();
 			mob.update();
-			if (mob.lifeSpan != -1) {
+			if (mob.alive && mob.lifeSpan != -1) {
 				mob.lifeSpan --;
-				if (mob.lifeSpan == 0) mob.finished = true;
+				if (mob.lifeSpan == 0) {
+					mob.alive = false;
+					mob.sca.X = 0;
+				}
+			} else if (mob.sca.x < 0.1) {
+				mob.finished = true;
 			}
 		}
 		for (int i = 0 ;  i < ar.size() ; i ++) {
@@ -52,31 +62,48 @@ class ScreenTunnel extends Entity {
 
 	void renderRect(float minW, float maxW) {
 		translate(0,0,w/2);
-		stroke(255);
 		for (TunnelEntity mob : ar) {
 			if (mob.draw && mob.p.p.x >= minW && mob.p.p.x < maxW) {
 				push();
 				translate(mob.p.p.x-minW-w/2,mob.p.p.y,mob.p.p.z);
+				scale(mob.sca.x);
 				if (mob.gradient) {
-					// Use tunnel's gradient
-					stroke(255);
+					gradient(mob);
 				} else {
-					mob.fillStyle.strokeStyle();
+					mob.fillStyle.fillStyle();
 				}
 				mob.render();
 				pop();
 			}
 		}
 		translate(0,0,1);
+		push();
 		noStroke();
+		fill(0);
 		rect(0,0,w,h);
+		pop();
 		translate(0,0,-w/2-1);
+	}
+
+	void gradient(TunnelEntity mob) {
+		switch (gMode) {
+			case 0:
+			x1 = mob.p.p.x/1000; y1 = mob.p.p.y/1000;
+			fill(noise(x1,y1,10)*255,noise(x1,y1,55)*255,noise(y1,x1,-100)*255,255);
+			break;
+			case 1:
+			x1 = mob.p.p.x/1000; y1 = mob.p.p.y/1500;
+			fill(noise(y1,x1,-57)*255,noise(x1,y1,3)*255,noise(x1,x1,100)*255,255);
+			break;
+			case 2:
+			break;
+		}
 	}
 
 	void render() {
 		push();
 		fill(0);
-		noStroke();
+		stroke(255);
 		translate(p.p.x,p.p.y,p.p.z);
 		rotateX(ang.p.x);
 		rotateY(ang.p.y);
@@ -107,7 +134,8 @@ abstract class TunnelEntity extends Entity {
   int lifeSpan = -1;
   ScreenTunnel parent = tel;
   IColor fillStyle;
-  boolean gradient = false;
+  boolean gradient = true;
+  boolean alive = true;
 
   TunnelEntity(ScreenTunnel parent) {
   	this.parent = parent;

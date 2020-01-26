@@ -82,7 +82,7 @@ class RectV extends TunnelEntity {
 		this.w = new Point(w,h,0);
 		this.w.p.set(0,0,0);
 		this.w.index = (int)random(binCount);
-		this.w.pm.z = sqrt(w*h)*0.03;
+		this.w.pm.z = sqrt(w*h)*0.1;
 		this.pv = new Point(vx,vy,0);
 		fillStyle = new IColor(random(25,100),random(25,100),random(25,100),255, random(10),random(10),random(10),0, (int)random(binCount));
 		this.lifeSpan = lifeSpan;

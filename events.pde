@@ -24,6 +24,20 @@ Background
 
 Background bass notes
 */
+class SetTunnelGMode extends Event {
+	ScreenTunnel tunnel;
+	int mode;
+	SetTunnelGMode(float time, ScreenTunnel tunnel, int mode) {
+		super(time, time+1);
+		this.tunnel = tunnel;
+		this.mode = mode;
+	}
+
+	void spawn() {
+		tunnel.gMode = mode;
+	}
+}
+
 class SetTunnelAv extends Event {
 	ScreenTunnel tunnel;
 	float x,y,z;

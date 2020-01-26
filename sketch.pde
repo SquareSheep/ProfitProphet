@@ -24,8 +24,7 @@ void render() {
 
 void setSketch() {
 	stroke(255);
-	strokeWeight(3);
 	noFill();
-	tel = new ScreenTunnel(new PVector(0,0,-de*0.5), new PVector(PI/2,0,0), de*0.8,de*2);
+	tel = new ScreenTunnel(new PVector(0,0,-de*0.5), new PVector(PI/2,0,0), de*1.2,de*3);
 	mobs.add(tel);
 }
