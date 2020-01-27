@@ -9,7 +9,7 @@ class ScreenTunnel extends Entity {
 	ArrayList<TunnelEntity> ar = new ArrayList<TunnelEntity>();
 	Point pv = new Point(); // pv for ar objects
 
-	int gMode = 0;
+	int gMode = 0; float gx = 0; float gy = 0;
 	float gr,gb,gg,ga,grm,gbm,ggm,gam;
 	float t,temp,x1,y1,x2,y2;
 
@@ -88,11 +88,11 @@ class ScreenTunnel extends Entity {
 	void gradient(TunnelEntity mob) {
 		switch (gMode) {
 			case 0:
-			x1 = mob.p.p.x/1000; y1 = mob.p.p.y/1000;
+			x1 = mob.p.p.x/1000+gx; y1 = mob.p.p.y/1000+gy;
 			fill(noise(x1,y1,10)*255,noise(x1,y1,55)*255,noise(y1,x1,-100)*255,255);
 			break;
 			case 1:
-			x1 = mob.p.p.x/1000; y1 = mob.p.p.y/1500;
+			x1 = mob.p.p.x/1000+gx; y1 = mob.p.p.y/1500+gy;
 			fill(noise(y1,x1,-57)*255,noise(x1,y1,3)*255,noise(x1,x1,100)*255,255);
 			break;
 			case 2:

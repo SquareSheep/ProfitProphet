@@ -1,6 +1,3 @@
-/*
-
-*/
 class RectVAvSource extends RectVSource {
 	int index; float threshold;
 

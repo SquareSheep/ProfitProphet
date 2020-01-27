@@ -150,21 +150,21 @@ void calcFFT() {
 }
 
 void mousePressed() {
-  float temp = ((float)mouseX / width) * song.length();
-  float tempBeat = ((temp+timer.offset)/60000.0*bpm);
-  tempBeat = tempBeat - tempBeat%0.5;
-  println(tempBeat);
-  for (Event event : events) {
-    if (tempBeat <= event.time) {
-      event.spawned = false;
-      event.finished = false;
-    }
-    if (currBeat >= event.time && currBeat < event.timeEnd) {
-      if (tempBeat < event.time || tempBeat >= event.timeEnd) event.end();
-    }
-  }
-  song.cue((int)temp);
-  currBeat = tempBeat;
+  // float temp = ((float)mouseX / width) * song.length();
+  // float tempBeat = ((temp+timer.offset)/60000.0*bpm);
+  // tempBeat = tempBeat - tempBeat%0.5;
+  // println(tempBeat);
+  // for (Event event : events) {
+  //   if (tempBeat <= event.time) {
+  //     event.spawned = false;
+  //     event.finished = false;
+  //   }
+  //   if (currBeat >= event.time && currBeat < event.timeEnd) {
+  //     if (tempBeat < event.time || tempBeat >= event.timeEnd) event.end();
+  //   }
+  // }
+  // song.cue((int)temp);
+  // currBeat = tempBeat;
 }
 
 void setTime(float time) {

@@ -7,9 +7,9 @@ static float defaultMass = 10;
 static float defaultVMult = 0.5;
 static float fillMass = 10;
 static float fillVMult = 0.5;
-static float fftThreshold = 1;
-static float fftPow = 1.8;
-static float fftAmp = 5;
+static float fftThreshold = 2.5;
+static float fftPow = 2;
+static float fftAmp = 10;
 static float volumeGain = -10;
 static String songName = "../Music/profitprophet.wav";
 
@@ -20,6 +20,7 @@ ScreenTunnel tel;
 
 void render() {
 	if (timer.beat) println(song.position() + " " + (int)(currBeat+1.0));
+	drawPitches2D();
 }
 
 void setSketch() {
