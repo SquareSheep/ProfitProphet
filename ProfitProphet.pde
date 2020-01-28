@@ -57,7 +57,7 @@ void setup() {
 }
 
 void draw() {
-  background(0);
+  background(defaultFill.r.x,defaultFill.g.x,defaultFill.b.x);
   cam.render();
   update();
 

@@ -2,19 +2,19 @@ class RectVAvSource extends RectVSource {
 	int index; float threshold;
 
 	RectVAvSource(float x, float y, float w, float h, float vx, float vy, 
-		int lifeSpan, int spawnLifeSpan, float[] spawnDir, boolean[] spawnFlip, int index, float threshold) {
+		int lifeSpan, int spawnLifeSpan, float[] spawnDir, boolean[] spawnFlip, float index, float threshold) {
 		super(x,y,w,h,vx,vy,lifeSpan,spawnLifeSpan,spawnDir,spawnFlip);
-		this.index = index; this.threshold = threshold;
+		this.index = (int)index; this.threshold = threshold;
 	}
 
-	RectVAvSource(float x, float y, float w, float h, float vx, float vy, int lifeSpan, int spawnLifeSpan, int index, float threshold) {
+	RectVAvSource(float x, float y, float w, float h, float vx, float vy, int lifeSpan, int spawnLifeSpan, float index, float threshold) {
 		super(x,y,w,h,vx,vy,lifeSpan,spawnLifeSpan);
-		this.index = index; this.threshold = threshold;
+		this.index = (int)index; this.threshold = threshold;
 	}
 
-	RectVAvSource(float x, float y, float w, float h, float vx, float vy, int index, float threshold) {
+	RectVAvSource(float x, float y, float w, float h, float vx, float vy, float index, float threshold) {
 		super(x,y,w,h,vx,vy);
-		this.index = index; this.threshold = threshold;
+		this.index = (int)index; this.threshold = threshold;
 	}
 
 	void spawnCheck() {
@@ -33,7 +33,7 @@ class RectVSource extends RectV {
 		super(x,y,w,h,vx,vy);
 		this.lifeSpan = lifeSpan;
 		this.spawnLifeSpan = spawnLifeSpan;
-		tick = (int)(w*h/max(vx,1)/max(vy,1)/60)+1;
+		tick = (int)(w*h/max(vx,1)/max(vy,1)/60)/2+1;
 		this.spawnDir = new float[spawnDir.length];
 		this.spawnFlip = new boolean[spawnFlip.length];
 		for (int i = 0 ; i < spawnFlip.length ; i ++) {

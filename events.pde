@@ -24,6 +24,37 @@ Background
 
 Background bass notes
 */
+class ClearTunnelInstant extends Event {
+	ScreenTunnel tunnel;
+	
+	ClearTunnelInstant(float time, ScreenTunnel tunnel) {
+		super(time, time+1);
+		this.tunnel = tunnel;
+	}
+
+	void spawn() {
+		for (int i = 0 ; i < tunnel.ar.size() ; i ++) {
+			tunnel.ar.get(i).finished = true;
+		}
+	}
+}
+
+class ClearTunnel extends Event {
+	ScreenTunnel tunnel;
+
+	ClearTunnel(float time, ScreenTunnel tunnel) {
+		super(time, time+1);
+		this.tunnel = tunnel;
+	}
+
+	void spawn() {
+		for (int i = 0 ; i < tunnel.ar.size() ; i ++) {
+			tunnel.ar.get(i).alive = false;
+			tunnel.ar.get(i).sca.X = 0;
+		}
+	}
+}
+
 class SetTunnelGMode extends Event {
 	ScreenTunnel tunnel;
 	int mode;
@@ -160,6 +191,36 @@ class TunnelObjectFillStyleSetM extends Event {
 
 	void spawn() {
 		mob.fillStyle.setM(r,g,b,a, index);
+	}
+}
+
+class FillStyleSetC extends Event {
+	IColor fillStyle;
+	float r,g,b,a;
+
+	FillStyleSetC(float time, IColor fillStyle, float r, float g, float b, float a) {
+		super(time, time+1);
+		this.fillStyle = fillStyle;
+		this.r = r; this.g = g; this.b = b; this.a = a;
+	}
+
+	void spawn() {
+		fillStyle.setC(r,g,b,a);
+	}
+}
+
+class FillStyleSetM extends Event {
+	IColor fillStyle;
+	float r,g,b,a;
+
+	FillStyleSetM(float time, IColor fillStyle, float r, float g, float b, float a) {
+		super(time, time+1);
+		this.fillStyle = fillStyle;
+		this.r = r; this.g = g; this.b = b; this.a = a;
+	}
+
+	void spawn() {
+		fillStyle.setM(r,g,b,a);
 	}
 }
 

@@ -76,13 +76,13 @@ class ScreenTunnel extends Entity {
 				pop();
 			}
 		}
-		translate(0,0,1);
+		translate(0,0,3);
 		push();
 		noStroke();
 		fill(0);
 		rect(0,0,w,h);
 		pop();
-		translate(0,0,-w/2-1);
+		translate(0,0,-w/2-3);
 	}
 
 	void gradient(TunnelEntity mob) {
@@ -130,7 +130,7 @@ class ScreenTunnel extends Entity {
 abstract class TunnelEntity extends Entity {
   Point p;
   Point w;
-  SpringValue sca = new SpringValue(1);
+  SpringValue sca = new SpringValue(0,1);
   int lifeSpan = -1;
   ScreenTunnel parent = tel;
   IColor fillStyle;
