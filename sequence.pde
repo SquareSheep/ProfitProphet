@@ -74,6 +74,31 @@ void addEvents() {
 	// Long bursts: 63, 59,61, 9799103105,111,-159, staccoty 161-183 muted 183-197
 	// Snare taps: 75-187, then muted for 187-207
 	// Continuous snare taps: 207-
+	time = 187;
+	events.add(new ClearTunnel(time));
+	events.add(new SetTunnelPv(time,0,0));
+	for (float i = 0 ; i < 32 ; i ++) {
+		events.add(new SetTunnelGMode(time+i,(int)(i%2)));
+		if (i % 2 == 0) {
+			spawnRectVRing(time+i,-0.5, w,h, 0.02,-0.03, 60,num);
+			spawnRectVRing(time+i,0.5, w,h, 0.02,0.03, 60,num);
+		} else {
+			if (i % 4 == 1) {	
+				for (float k = 0 ; k < 4 ; k ++) {
+					spawnRectVLine(time+i,k/4, w,h, 0.03,0.02, 60,num);
+				}
+			} else {
+				for (float k = 0 ; k < 4 ; k ++) {
+					spawnRectVLine(time+i,k/4, w,h, -0.03,-0.02, 60,num);
+				}
+			}
+		}
+	}
+	for (int i = 0 ; i < 8 ; i ++) {
+		for (float k = 0 ; k < 12 ; k ++) {
+			spawnRectVRing(time+1+i*4,k/12, 0.1,0.1, 0.02,0.04, 60,12);
+		}
+	}
 }
 
 void keyboardInput() {
@@ -91,7 +116,7 @@ void keyboardInput() {
 		setTime(30557,61);
 		break;
 		case '5':
-		setTime(0,0);
+		setTime(93065,187);
 		break;
 		case '6':
 		setTime(0,0);
