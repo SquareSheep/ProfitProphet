@@ -89,13 +89,16 @@ class ScreenTunnel extends Entity {
 		switch (gMode) {
 			case 0:
 			x1 = mob.p.p.x/1000+gx; y1 = mob.p.p.y/1000+gy;
-			fill(noise(x1,y1,10)*255,noise(x1,y1,55)*255,noise(y1,x1,-100)*255,255);
+			temp = (float)frameCount/100;
+			fill(noise(x1,y1,10 + temp)*255,noise(x1,y1,55 + temp)*255,noise(y1,x1,-100 + temp)*255,255);
 			break;
 			case 1:
 			x1 = mob.p.p.x/1000+gx; y1 = mob.p.p.y/1500+gy;
-			fill(noise(y1,x1,-57)*255,noise(x1,y1,3)*255,noise(x1,x1,100)*255,255);
+			fill(noise(y1,x1,-57)*125+125,noise(x1,y1,3)*125+125,noise(x1,x1,100)*125+125,255);
 			break;
 			case 2:
+			x1 = noise(mob.p.p.x/1000,mob.p.p.y/500,(float)frameCount/100)*255;
+			fill(x1,x1,x1,255);
 			break;
 		}
 	}

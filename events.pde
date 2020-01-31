@@ -1,135 +1,139 @@
 /*
-Lots of squares. Moving up and down
-Cell automata would work pretty well here
-Like in that Raven Kwok video for Max Cooper
-Wireframe style, like on Gage's album cover
+Rings
+Straight Lines
+Diagonal lines
+Sine wave lines
+Random
+Checkered
+Striped
 
-Moving down an infinite tunnel lined with square panels.
-Tunnel complexity relates to current song complexity.
+Tunnel position
+Tunnel rotation
+Tunnel GMode
 
+Random tunnel object appear/disappear
+Random tunnel object sca.x,w.p.z,etc
 
-Four wall container objects.
-Squares can be spawned in them, get displayed on the surface.
-
-
-
-Long burst
-Short burst
-Wavy bursts
-
-Drum rim hits
-
-Background beat
-Background 
-
-Background bass notes
 */
+void spawnRectVRing(float time, float z, float w, float h, float vx, float vy, int lifeSpan, int num){
+	for (float i = 0 ; i < num ; i ++) {
+		events.add(new SpawnTunnelObject(time, new RectV((i/num-0.5)*tel.W*2,(z-0.5)*tel.H*2, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, lifeSpan)));
+	}
+}
+
+void spawnRectVLine(float time, float x, float w, float h, float vx, float vy, int lifeSpan, int num){
+	spawnRectVLine(time, x,0, w,h, vx,vy, lifeSpan,num);
+}
+
+void spawnRectVLine(float time, float x, float dx, float w, float h, float vx, float vy, int lifeSpan, int num){
+	for (float i = 0 ; i < num ; i ++) {
+		events.add(new SpawnTunnelObject(time, new RectV((x+dx*i-0.5)*tel.W*2,(i/num-0.5)*tel.H*2, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, lifeSpan)));
+	}
+}
+
+void spawnRectVAvSourceRing(float time, float z, float w, float h, float vx, float vy, 
+	int lifeSpan, int spawnLifeSpan, float[] spawnDir, boolean[] spawnFlip, float index, float threshold, int num){
+	for (float i = 0 ; i < num ; i ++) {
+		events.add(new SpawnTunnelObject(time, new RectVAvSource((i/num-0.5)*tel.W*2,(z-0.5)*tel.H*2, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, 
+		 		lifeSpan,spawnLifeSpan, spawnDir, spawnFlip,(index+i)%binCount,threshold)));
+	}
+}
+
+void spawnRectVAvSourceLine(float time, float x, float w, float h, float vx, float vy, 
+	int lifeSpan, int spawnLifeSpan, float[] spawnDir, boolean[] spawnFlip, float index, float threshold, int num){
+	spawnRectVAvSourceLine(time,x,0, w,h, vx,vy, lifeSpan,spawnLifeSpan, spawnDir,spawnFlip, index,threshold,num);
+}
+
+void spawnRectVAvSourceLine(float time, float x, float dx, float w, float h, float vx, float vy, 
+	int lifeSpan, int spawnLifeSpan, float[] spawnDir, boolean[] spawnFlip, float index, float threshold, int num){
+	for (float i = 0 ; i < num ; i ++) {
+		events.add(new SpawnTunnelObject(time, new RectVAvSource((x+dx*i-0.5)*tel.W*2,(i/num-0.5)*tel.H*2, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, 
+		 		lifeSpan,spawnLifeSpan, spawnDir, spawnFlip,(index+i)%binCount,threshold)));
+	}
+}
+
+
 class ClearTunnelInstant extends Event {
-	ScreenTunnel tunnel;
 	
-	ClearTunnelInstant(float time, ScreenTunnel tunnel) {
+	ClearTunnelInstant(float time) {
 		super(time, time+1);
-		this.tunnel = tunnel;
 	}
 
 	void spawn() {
-		for (int i = 0 ; i < tunnel.ar.size() ; i ++) {
-			tunnel.ar.get(i).finished = true;
+		for (int i = 0 ; i < tel.ar.size() ; i ++) {
+			tel.ar.get(i).finished = true;
 		}
 	}
 }
 
 class ClearTunnel extends Event {
-	ScreenTunnel tunnel;
 
-	ClearTunnel(float time, ScreenTunnel tunnel) {
+	ClearTunnel(float time) {
 		super(time, time+1);
-		this.tunnel = tunnel;
 	}
 
 	void spawn() {
-		for (int i = 0 ; i < tunnel.ar.size() ; i ++) {
-			tunnel.ar.get(i).alive = false;
-			tunnel.ar.get(i).sca.X = 0;
+		for (int i = 0 ; i < tel.ar.size() ; i ++) {
+			tel.ar.get(i).alive = false;
+			tel.ar.get(i).sca.X = 0;
 		}
 	}
 }
 
 class SetTunnelGMode extends Event {
-	ScreenTunnel tunnel;
 	int mode;
-	SetTunnelGMode(float time, ScreenTunnel tunnel, int mode) {
+	SetTunnelGMode(float time, int mode) {
 		super(time, time+1);
-		this.tunnel = tunnel;
 		this.mode = mode;
 	}
 
 	void spawn() {
-		tunnel.gMode = mode;
+		tel.gMode = mode;
 	}
 }
 
 class SetTunnelAv extends Event {
-	ScreenTunnel tunnel;
 	float x,y,z;
 
-	SetTunnelAv(float time, ScreenTunnel tunnel, float x, float y, float z) {
+	SetTunnelAv(float time, float x, float y, float z) {
 		super(time, time+1);
-		this.tunnel = tunnel;
 		this.x = x; this.y = y; this.z = z;
 	}
 
 	void spawn() {
-		tunnel.av.P.set(x,y,z);
+		tel.av.P.set(x,y,z);
 	}
 }
 
 class SetTunnelPv extends Event {
-	ScreenTunnel tunnel;
-	float vx, vy;
+	float x,y;
 
-	SetTunnelPv(float time, ScreenTunnel tunnel, float vx, float vy) {
+	SetTunnelPv(float time, float x, float y) {
 		super(time, time+1);
-		this.tunnel = tunnel;
-		this.vx = vx; this.vy = vy;
+		this.x = x; this.y = y;
 	}
 
 	void spawn() {
-		tunnel.pv.P.set(vx,vy,0);
+		tel.pv.P.set(x,y,0);
 	}
 }
 
 class SpawnTunnelObject extends Event {
 	TunnelEntity mob;
-	ScreenTunnel tunnel;
-	float x,y,z; int lifeSpan;
 
-	SpawnTunnelObject(float time, ScreenTunnel tunnel, TunnelEntity mob) {
+	SpawnTunnelObject(float time, TunnelEntity mob) {
 		super(time, time+1);
 		this.mob = mob;
-		this.tunnel = tunnel;
-		// x = mob.p.p.x;
-		// y = mob.p.p.y;
-		// z = mob.p.p.z;
-		// lifeSpan = mob.lifeSpan;
 	}
 
 	void spawn() {
-		// mob.p.reset(x,y,z);
-		// mob.lifeSpan = lifeSpan;
-		// mob.finished = false;
-		// mob.draw = true;
-		tunnel.add(mob);
+		tel.add(mob);
 	}
 }
 
-class SetTunnelObjectP extends Event {
-	TunnelEntity mob;
-	float x,y;
+class SetTunnelObjectP extends SetTunnelObjectXYZ {
 	SetTunnelObjectP(float time, TunnelEntity mob, float x, float y) {
-		super(time,time+1);
-		this.mob = mob;
-		this.x = x; this.y = y;
+		super(time,mob,x,y);
 	}
 
 	void spawn() {
@@ -137,13 +141,9 @@ class SetTunnelObjectP extends Event {
 	}
 }
 
-class SetTunnelObjectScaX extends Event {
-	TunnelEntity mob;
-	float x;
+class SetTunnelObjectScaX extends SetTunnelObjectXYZ {
 	SetTunnelObjectScaX(float time, TunnelEntity mob, float x) {
-		super(time,time+1);
-		this.mob = mob;
-		this.x = x;
+		super(time,mob,x);
 	}
 
 	void spawn() {
@@ -151,13 +151,9 @@ class SetTunnelObjectScaX extends Event {
 	}
 }
 
-class SetTunnelObjectScax extends Event {
-	TunnelEntity mob;
-	float x;
+class SetTunnelObjectScax extends SetTunnelObjectXYZ {
 	SetTunnelObjectScax(float time, TunnelEntity mob, float x) {
-		super(time,time+1);
-		this.mob = mob;
-		this.x = x;
+		super(time,mob,x);
 	}
 
 	void spawn() {
@@ -165,32 +161,26 @@ class SetTunnelObjectScax extends Event {
 	}
 }
 
-class TunnelObjectFillStyleSetC extends Event {
+abstract class SetTunnelObjectXYZ extends Event {
 	TunnelEntity mob;
-	float r,g,b,a;
-	TunnelObjectFillStyleSetC(float time, TunnelEntity mob, float r, float g, float b, float a) {
+	float x,y,z;
+
+	SetTunnelObjectXYZ(float time, TunnelEntity mob, float x, float y, float z) {
 		super(time,time+1);
 		this.mob = mob;
-		this.r = r; this.g = g; this.b = b; this.a = a;
+		this.x = x; this.y = y; this.z = z;
 	}
 
-	void spawn() {
-		mob.fillStyle.setC(r,g,b,a);
-	}
-}
-
-class TunnelObjectFillStyleSetM extends Event {
-	TunnelEntity mob;
-	float r,g,b,a,index;
-	TunnelObjectFillStyleSetM(float time, TunnelEntity mob, float r, float g, float b, float a, float index) {
+	SetTunnelObjectXYZ(float time, TunnelEntity mob, float x, float y) {
 		super(time,time+1);
 		this.mob = mob;
-		this.r = r; this.g = g; this.b = b; this.a = a;
-		this.index = index;
+		this.x = x; this.y = y;
 	}
 
-	void spawn() {
-		mob.fillStyle.setM(r,g,b,a, index);
+	SetTunnelObjectXYZ(float time, TunnelEntity mob, float x) {
+		super(time,time+1);
+		this.mob = mob;
+		this.x = x;
 	}
 }
 

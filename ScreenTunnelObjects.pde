@@ -18,7 +18,7 @@ class RectVAvSource extends RectVSource {
 	}
 
 	void spawnCheck() {
-		if (frameCount % tick == 0 && av[index] > threshold) spawn();
+		if (av[index] > threshold) spawn();
 	}
 }
 
@@ -33,7 +33,7 @@ class RectVSource extends RectV {
 		super(x,y,w,h,vx,vy);
 		this.lifeSpan = lifeSpan;
 		this.spawnLifeSpan = spawnLifeSpan;
-		tick = (int)(w*h/max(vx,1)/max(vy,1)/60)/2+1;
+		tick = (int)(w*h/max(vx,1)/max(vy,1)/60)*2+1;
 		this.spawnDir = new float[spawnDir.length];
 		this.spawnFlip = new boolean[spawnFlip.length];
 		for (int i = 0 ; i < spawnFlip.length ; i ++) {
