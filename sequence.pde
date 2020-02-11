@@ -1,7 +1,7 @@
 void addEvents() {
 	events.add(new SetTunnelPv(0,0,0));
 	
-	float time = 1; int num = 10; float w = 0.3; float h = 0.2; float threshold = 10;
+	float time = 1; int num = 20; float w = 0.3; float h = 0.2; float threshold = 3;
 	for (int i = 0 ; i < 4 ; i ++) {
 		for (float k = 0 ; k < 4 ; k ++) {
 			spawnRectVLine(time+i*2,k/4, w,h, 0.01,0.01, 90,num);
@@ -12,25 +12,39 @@ void addEvents() {
 	events.add(new ClearTunnel(time));
 	events.add(new SetTunnelPv(time,0,10));
 	for (float i = 0 ; i < 5 ; i ++) {
-		spawnRectVRing(time+i*2,-0.5, w,h, 0.01,-0.03, 90,num);
-		spawnRectVRing(time+i*2,0.5, w,h, 0.01,0.03, 90,num);
+		spawnRectVRing(time+i*2,0, w,h, 0.01,-0.03, 180,num);
+		spawnRectVRing(time+i*2,0, w,h, 0.01,0.03, 180,num);
 	}
 
-	time = 17; num = 16; float sAmp = 0.2;
+	time = 17;
 	events.add(new ClearTunnel(time));
 	for (float i = 0 ; i < 8 ; i ++) {
-		spawnRectVAvSourceLine(time+i*2, 0, w,h, 0.02,0, 180,15, 
+		spawnRectVAvSourceLine(time+i*2, 0, w,h, -0.02,0, 180,30, 
+			new float[]{-2,-2,2,2}, new boolean[]{true,true},i/num*binCount,threshold,num);
+		spawnRectVAvSourceLine(time+i*2, 1, w,h, 0.02,0, 180,30, 
 			new float[]{-2,-2,2,2}, new boolean[]{true,true},i/num*binCount,threshold,num);
 	}
+	for (int i = 0 ; i < 8 ; i ++) {
+		spawnRectVAvSourceLine(time+i*2, 0.5,0, w,h, 0.03,0, 120,30, 
+			new float[]{-2,-2}, new boolean[]{false},i/num*binCount,threshold,num);
+	}
 
-	time = 33; sAmp = 1.5; num = 10;
+	time = 33;
 	events.add(new ClearTunnel(time));
 	events.add(new SetTunnelPv(time,0,-10));
 	for (int i = 0 ; i < 8 ; i ++) {
-		spawnRectVAvSourceLine(time+i*2, 0, w,h, 0.01,0, 120,15, 
+		spawnRectVAvSourceLine(time+i*2, 0.5,0, w,h, -0.02,0, 120,30, 
 			new float[]{-2,-2,2,2}, new boolean[]{true,true},i/num*binCount,threshold,num);
-		// spawnRectVAvSourceLine(time+i*2, 0.5, w,h, 0.05,0, 120,15, 
-		// 	new float[]{-2,-2,2,2}, new boolean[]{false,false},i/num*binCount,threshold,num);
+		spawnRectVAvSourceLine(time+i*2, -0.5,0, w,h, -0.02,0, 120,30, 
+			new float[]{-2,-2,2,2}, new boolean[]{true,true},i/num*binCount,threshold,num);
+	}
+
+	time = 51; w = 0.15; h=0.1;
+	for (int i = 0 ; i < 6 ; i ++) {
+		for (int k = 0 ; k < 4 ; k ++) {
+			spawnRectVAvSourceLine(time+i*2, k*0.5,0, w,h, -0.03,0, 120,30, 
+				new float[]{-2,-2,2,2}, new boolean[]{true,true},i/num*binCount,threshold,num);
+		}
 	}
 
 	/*

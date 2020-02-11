@@ -22,7 +22,7 @@ void render() {
 	defaultFill.update();
 	if (timer.beat) println(song.position() + " " + (int)(currBeat+1.0));
 	//drawPitches2D();
-	//cam.ang.P.set(sin((float)frameCount/120)*0.03,cos((float)frameCount/120)*0.03,-(float)frameCount/1200*PI);
+	cam.ang.P.set(sin((float)frameCount/120)*0.03,cos((float)frameCount/120)*0.03,(float)frameCount/100*PI);
 }
 
 void setSketch() {

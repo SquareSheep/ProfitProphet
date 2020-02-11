@@ -14,10 +14,12 @@ Tunnel GMode
 Random tunnel object appear/disappear
 Random tunnel object sca.x,w.p.z,etc
 
+
+
 */
 void spawnRectVRing(float time, float z, float w, float h, float vx, float vy, int lifeSpan, int num){
 	for (float i = 0 ; i < num ; i ++) {
-		events.add(new SpawnTunnelObject(time, new RectV((i/num-0.5)*tel.W*2,(z-0.5)*tel.H*2, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, lifeSpan)));
+		events.add(new SpawnTunnelObject(time, new RectV((i/num-0.5)*tel.W*2,(z)*tel.H, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, lifeSpan)));
 	}
 }
 
@@ -27,14 +29,14 @@ void spawnRectVLine(float time, float x, float w, float h, float vx, float vy, i
 
 void spawnRectVLine(float time, float x, float dx, float w, float h, float vx, float vy, int lifeSpan, int num){
 	for (float i = 0 ; i < num ; i ++) {
-		events.add(new SpawnTunnelObject(time, new RectV((x+dx*i-0.5)*tel.W*2,(i/num-0.5)*tel.H*2, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, lifeSpan)));
+		events.add(new SpawnTunnelObject(time, new RectV((x+dx*i)*tel.W,(i/num-0.5)*tel.H*2, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, lifeSpan)));
 	}
 }
 
 void spawnRectVAvSourceRing(float time, float z, float w, float h, float vx, float vy, 
 	int lifeSpan, int spawnLifeSpan, float[] spawnDir, boolean[] spawnFlip, float index, float threshold, int num){
 	for (float i = 0 ; i < num ; i ++) {
-		events.add(new SpawnTunnelObject(time, new RectVAvSource((i/num-0.5)*tel.W*2,(z-0.5)*tel.H*2, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, 
+		events.add(new SpawnTunnelObject(time, new RectVAvSource((i/num-0.5)*tel.W*2,(z)*tel.H, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, 
 		 		lifeSpan,spawnLifeSpan, spawnDir, spawnFlip,(index+i)%binCount,threshold)));
 	}
 }
@@ -47,7 +49,7 @@ void spawnRectVAvSourceLine(float time, float x, float w, float h, float vx, flo
 void spawnRectVAvSourceLine(float time, float x, float dx, float w, float h, float vx, float vy, 
 	int lifeSpan, int spawnLifeSpan, float[] spawnDir, boolean[] spawnFlip, float index, float threshold, int num){
 	for (float i = 0 ; i < num ; i ++) {
-		events.add(new SpawnTunnelObject(time, new RectVAvSource((x+dx*i-0.5)*tel.W*2,(i/num-0.5)*tel.H*2, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, 
+		events.add(new SpawnTunnelObject(time, new RectVAvSource((x+dx*i)*tel.W,(i/num-0.5)*tel.H*2, w*tel.w,h*tel.w, vx*tel.w,vy*tel.w, 
 		 		lifeSpan,spawnLifeSpan, spawnDir, spawnFlip,(index+i)%binCount,threshold)));
 	}
 }

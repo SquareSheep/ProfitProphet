@@ -30,18 +30,18 @@ class ScreenTunnel extends Entity {
 			TunnelEntity mob = ar.get(i);
 			mob.p.P.add(pv.p);
 			if (mob.p.p.x < -W) {
-				mob.p.p.x = W;
-				mob.p.P.x = W;
+				mob.p.p.x = W-mob.p.p.x%W;
+				mob.p.P.x = W-mob.p.p.x%W;
 			} else if (mob.p.p.x > W) {
-				mob.p.p.x = -W;
-				mob.p.P.x = -W;
+				mob.p.p.x = -W+mob.p.p.x%W;
+				mob.p.P.x = -W+mob.p.p.x%W;
 			}
 			if (mob.p.p.y < -H) {
-				mob.p.p.y = H;
-				mob.p.P.y = H;
+				mob.p.p.y = H-mob.p.p.y%H;
+				mob.p.P.y = H-mob.p.p.y%H;
 			} else if (mob.p.p.y > H) {
-				mob.p.p.y = -H;
-				mob.p.P.y = -H;
+				mob.p.p.y = -H+mob.p.p.y%H;
+				mob.p.P.y = -H+mob.p.p.y%H;
 			}
 			mob.sca.update();
 			mob.update();
